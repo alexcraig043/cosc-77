@@ -1,3 +1,6 @@
 /build
 /solution
 /dirt/build
+/dirt_basecode/build
+
+*.ipch
