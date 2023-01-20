@@ -4,6 +4,7 @@
 // Contact: Bo Zhu (bo.zhu@dartmouth.edu)
 //#####################################################################
 #include <iostream>
+#include <cstdlib>
 #include <random>
 #include "Common.h"
 #include "Driver.h"
@@ -19,7 +20,7 @@
 //// TODO: put your name in the string               
 /////////////////////////////////////////////////////////////////////
 
-const std::string author="name";
+const std::string author="Alex Craig";
 
 /////////////////////////////////////////////////////////////////////
 //// These are helper functions we created to generate circles and triangles by testing whether a point is inside the shape or not.
@@ -74,25 +75,87 @@ vec2 polar2cart(float angle, float length) {
 // iResolution: the size of the window (default: 1280*960)         //
 /////////////////////////////////////////////////////////////////////
 
+// To check if a point is inside a quadrilateral
+bool inQuad(vec2 p, vec2 p1, vec2 p2, vec2 p3, vec2 p4) {
+	if (inTriangle(p, p1, p2, p3) || inTriangle(p, p1, p3, p4) || inTriangle(p, p1, p2, p4) || inTriangle(p, p2, p3, p4)) {
+		return true;
+	}
+	return false;
+}
+
+// To check if a point is below a sine wave
+bool belowSine(vec2 p, float amplitude, float period, float horizontalOffset, float verticalOffset) {
+	if (p.y < amplitude * sin(p.x / period + horizontalOffset) + verticalOffset) {
+		return true;
+	}
+	return false;
+}
+
 // Return the rgba color of the grid at position (x, y) 
 vec4 paintGrid(float x, float y) {
 	vec2 center = vec2(iResolution / PIXEL_SIZE / 2.); // window center
-	vec2 p1 = polar2cart(iTime, 16.) + center;
-	vec2 p2 = polar2cart(iTime + 2. * M_PI / 3., 16.) + center;
-	vec2 p3 = polar2cart(iTime + 4. * M_PI / 3., 16.) + center;
-	vec2 p4 = polar2cart(iTime + M_PI / 3., 16.) + center;
-	vec2 p5 = polar2cart(iTime + M_PI, 16.) + center;
-	vec2 p6 = polar2cart(iTime + 5. * M_PI / 3., 16.) + center;
-	bool inTrangle1 = inTriangle(vec2(x, y), p1, p2, p3);
-	bool inTrangle2 = inTriangle(vec2(x, y), p4, p5, p6);
-	if (inTrangle1 && inTrangle2) {
-		return vec4(1.0);
-	}
-	else if (inTrangle1 || inTrangle2) {
-		return vec4(vec3(217, 249, 255) / 255., 1.); 
-	}
-	else {
-		return vec4(vec3(184, 243, 255) / 255., 1.);
+
+	// Boat hull:
+	vec2 p1 = vec2(6., -6.) + center;
+	vec2 p2 = vec2(-6., -6.) + center;
+	vec2 p3 = vec2(16., 6.) + center;
+	vec2 p4 = vec2(-16., 6.) + center;
+	bool inBoat = inQuad(vec2(x, y), p1, p2, p3, p4);
+
+	// Boat mast:
+	vec2 p5 = vec2(0.5, 0.) + center;
+	vec2 p6 = vec2(-0.5, 0.) + center;
+	vec2 p7 = vec2(0.5, 24.) + center;
+	vec2 p8 = vec2(-0.5, 24.) + center;
+	bool onMast = inQuad(vec2(x, y), p5, p6, p7, p8);
+
+	// Boat sail:
+	vec2 p9 = vec2(0., 24.) + center;
+	vec2 p10 = vec2(-16., 12.) + center;
+	vec2 p11 = vec2(16., 12.) + center;
+	bool onSail = inTriangle(vec2(x, y), p9, p10, p11);
+
+	// Water:
+	bool inWater = belowSine(vec2(x, y), 3., 6., 3 + iTime * 4, center.y - 1.);
+
+	// Sun:
+	vec2 sunCenter = polar2cart(iTime * 2 + M_PI / 4, 35.) + center;
+	bool inSun = inCircle(vec2(x, y), sunCenter, 6.);
+
+	// Moon:
+	vec2 moonCenter = polar2cart(iTime * 2 + M_PI / 4 + M_PI, 35.) + center;
+	bool inMoon = inCircle(vec2(x, y), moonCenter, 4.);
+
+	if (inWater) {
+		return vec4(vec3(0, 0, 255) / 255., 1.);
+	} else 	if (inBoat) {
+		return vec4(vec3(150, 75, 0) / 255., 1.);
+	} else if (onMast) {
+		return vec4(vec3(196, 164, 132) / 255., 1.);
+	} else if (onSail) {
+		return vec4(vec3(255, 255, 255) / 255., 1.); 
+	} else if (inSun) {
+		return vec4(vec3(255, 255, 0) / 255., 1.);
+	} else if (inMoon) {
+		return vec4(vec3(255, 255, 255) / 255., 1.);
+	} else {
+		// Sunset logic:
+		if (sunCenter.y + 6. > center.y + 24) {
+			// Daytime
+			return vec4(vec3(184, 243, 255) / 255., 1.);
+		} else if (sunCenter.y + 6. > center.y + 16) {
+			// Sunset color 1
+			return vec4(vec3(227, 168, 87) / 255., 1.);
+		} else if (sunCenter.y + 6. > center.y + 10) {
+			// Sunset color 2
+			return vec4(vec3(255, 204, 51) / 255., 1.);
+		} else if (sunCenter.y + 6. > center.y) {
+			// Sunset color 3
+			return vec4(vec3(253, 94, 83) / 255., 1.);
+		} else {
+			// Nighttime
+			return vec4(vec3(128, 128, 128) / 255., 1.);
+		}
 	}
 }
 
