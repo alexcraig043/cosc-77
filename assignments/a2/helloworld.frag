@@ -18,6 +18,7 @@ uniform float iTime;
 /*input variables*/
 in vec4 vtx_color;
 ////TODO: define your own data channel(s) to receive the normal attribute from the vertex shader
+in vec3 vtx_normal;
 
 /*output variables*/
 out vec4 frag_color;	/*or use gl_FragColor*/
@@ -25,5 +26,6 @@ out vec4 frag_color;	/*or use gl_FragColor*/
 void main()							
 {	
 	////This is the default implementation of the fragment color. Change it to the color depending on the input normal value.
-	frag_color = vec4(vtx_color.rgb,1.f);
+	frag_color = vec4(vtx_normal.rgb,1.f);
+
 }	

@@ -79,7 +79,8 @@
     "unordered_set": "cpp",
     "valarray": "cpp",
     "variant": "cpp",
-    "algorithm": "cpp"
+    "algorithm": "cpp",
+    "hash_map": "cpp"
   },
   "C_Cpp.errorSquiggles": "enabled"
 }

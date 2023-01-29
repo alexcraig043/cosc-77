@@ -18,6 +18,9 @@ uniform float iTime;
 /*input variables*/
 in vec4 vtx_color;
 ////TODO [Step 2]: add your in variables from the vertex shader
+in vec4 vtx_norm;
+in vec4 vtx_pos;
+in vec4 frag_pos;
 
 /*output variables*/
 out vec4 frag_color;
@@ -25,10 +28,20 @@ out vec4 frag_color;
 /*hard-coded lighting parameters*/
 const vec3 LightPosition = vec3(3, 1, 3);
 ////TODO [Step 2]: add your Lambertian lighting parameters here
+const float material_a = 0.1f;
+const vec3 light_a = vec3(1.f,1.f,1.f);
+
+const float material_d = 1.f;
+const vec3 light_d = vec3(1.f,1.f,1.f);
 
 void main()							
 {		
 	////TODO [Step 2]: add your Lambertian lighting calculation
+	vec3 norm_unit = normalize(vtx_norm.xyz);
+	vec3 light_dir = normalize(LightPosition - frag_pos.xyz);
 
-	frag_color = vec4(0.f,1.f,0.f,1.f);
+	vec3 ambient = material_a * light_a;
+	vec3 diffuse = material_d * light_d * max(dot(norm_unit, light_dir), 0.0);
+
+	frag_color = vec4((ambient + diffuse) * vtx_color.rgb, 1.f);
 }	
