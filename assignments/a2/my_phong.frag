@@ -36,7 +36,7 @@ const vec3 light_color_d = vec3(1.f,1.f,1.f);
 
 const float material_s = 0.5f;
 const vec3 light_color_s = vec3(1.f,1.f,1.f);
-const int power = 15;
+const int power = 20;
 
 void main()							
 {		
