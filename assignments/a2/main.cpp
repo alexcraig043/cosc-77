@@ -91,7 +91,7 @@ public:
 
 	////This function demonstrates how to manipulate the color and normal arrays of a mesh on the CPU end.
 	////The updated colors and normals will be sent to GPU for rendering automatically.
-	void Update_Vertex_Color_And_Normal_For_Mesh_Object(OpenGLTriangleMesh* obj)
+	void Update_Vertex_Color_And_Normal_For_Mesh_Object(OpenGLTriangleMesh* obj, int season)
 	{
 		int vn=(int)obj->mesh.Vertices().size();					////number of vertices of a mesh
 		std::vector<Vector3>& vertices=obj->mesh.Vertices();		////you might find this array useful
@@ -103,9 +103,19 @@ public:
 
 		////TODO [Step 0]: update the color for each vertex.
 		////NOTICE: This code updates the vertex color array on the CPU end. The array will then be sent to GPU and read it the vertex shader as v_color.
-		////You don't need to implement the CPU-GPU data transfer code.
+		////You don't need to implement the CPU-GPU data transfer code
 		for(int i=0;i<vn;i++){
-			vtx_color[i]=Vector4f(0.,1.,0.,1.);	////specify color for each vertex
+			//vtx_color[i] = Vector4f(sin(i), cos(i), sin(i / 2), 1.0);
+
+			////specify color for each vertex by season
+			if (season == 0)
+				vtx_color[i]=Vector4f(1.,0.,0.,1.);
+			else if (season == 1)
+				vtx_color[i]=Vector4f(1.,1.,0.,1.);		
+			else if (season == 2)
+				vtx_color[i]=Vector4f(0.,0.,1.,1.);
+			else
+				vtx_color[i]=Vector4f(0.,1.,0.,1.);	
 		}
 
 		std::vector<Vector3>& vtx_normal=obj->vtx_normal;
@@ -196,27 +206,39 @@ public:
 	virtual void Initialize_Data()
 	{
 		////Add a sphere mesh
-		// {
-		// 	int obj_idx=Add_Sphere_Object();
-		// 	auto obj=mesh_object_array[obj_idx];
-		// 	Update_Vertex_Color_And_Normal_For_Mesh_Object(obj);		
-		// }
+		{
+			int obj_idx=Add_Sphere_Object();
+			auto obj=mesh_object_array[obj_idx];
+			Update_Vertex_Color_And_Normal_For_Mesh_Object(obj, 0);	
+		}
 
 		////Add an obj mesh
 		////TODO [Step 4]: uncomment this part and use your own mesh for Step 4.
-		{
-			int obj_idx=Add_Obj_Mesh_Object("bunny.obj");
-			auto obj=mesh_object_array[obj_idx];
-			Update_Vertex_Color_And_Normal_For_Mesh_Object(obj);		
-		}
+		// {
+		// 	int obj_idx=Add_Obj_Mesh_Object("bunny.obj");
+		// 	auto obj=mesh_object_array[obj_idx];
+		// 	Update_Vertex_Color_And_Normal_For_Mesh_Object(obj, 0);		
+		// }
 
 		////If you want to put multiple objects in the scene, uncomment this block. It will add another sphere mesh in the scene.
-		//{
-		//	int obj_idx=Add_Sphere_Object();	////add a sphere
-		//	auto obj=mesh_object_array[obj_idx];
-		//	Translate_Vertex_Position_For_Mesh_Object(obj,Vector3::Unit(0)*3.);
-		//	Update_Vertex_Color_And_Normal_For_Mesh_Object(obj);		
-		//}
+		{
+			int obj_idx=Add_Sphere_Object();	////add a sphere
+			auto obj=mesh_object_array[obj_idx];
+			Translate_Vertex_Position_For_Mesh_Object(obj,Vector3::Unit(0)*3.);
+			Update_Vertex_Color_And_Normal_For_Mesh_Object(obj, 1);		
+		}
+		{
+			int obj_idx=Add_Sphere_Object();	////add a sphere
+			auto obj=mesh_object_array[obj_idx];
+			Translate_Vertex_Position_For_Mesh_Object(obj,Vector3::Unit(0)*-6.);
+			Update_Vertex_Color_And_Normal_For_Mesh_Object(obj, 2);		
+		}
+		{
+			int obj_idx=Add_Sphere_Object();	////add a sphere
+			auto obj=mesh_object_array[obj_idx];
+			Translate_Vertex_Position_For_Mesh_Object(obj,Vector3::Unit(0)*-3.);
+			Update_Vertex_Color_And_Normal_For_Mesh_Object(obj, 3);		
+		}
 
 		//////Add a manually built triangle mesh (with a single triangle). This is the demo code I showed in class.
 		//// You don't need this part for your homework. Just put them here for your reference.

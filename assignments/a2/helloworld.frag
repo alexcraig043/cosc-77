@@ -26,6 +26,7 @@ out vec4 frag_color;	/*or use gl_FragColor*/
 void main()							
 {	
 	////This is the default implementation of the fragment color. Change it to the color depending on the input normal value.
-	frag_color = vec4(vtx_normal.rgb,1.f);
+	frag_color = vec4(vtx_normal.rgb, 1.f);
+	// frag_color = vec4(vtx_color.rgb, 1.0);
 
 }	

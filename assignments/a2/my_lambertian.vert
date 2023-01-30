@@ -20,9 +20,8 @@ layout (location=2) in vec4 normal;			/*vertex normal*/
 /*output variables*/
 out vec4 vtx_color;
 ////TODO: add your out variables to the fragment shader
-out vec4 vtx_norm;
-out vec4 vtx_pos;
-out vec4 frag_pos;
+out vec3 vtx_norm;
+out vec3 vtx_pos;
 
 void main()												
 {
@@ -32,7 +31,6 @@ void main()
 	vtx_color=vec4(v_color.rgb,1.f);
 	
 	////TODO: add your operations on the out variables
-	vtx_norm = vec4(normal.xyz, 1.f);
-	vtx_pos = vec4(pos.xyz, 1.f);
-	frag_pos = vec4(pos.xyz, 1.f);
+	vtx_norm = normal.xyz;
+	vtx_pos = pos.xyz;
 }	

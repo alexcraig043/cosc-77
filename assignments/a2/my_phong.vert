@@ -12,6 +12,9 @@ layout (std140) uniform camera
 	vec4 position;		/*camera's position in world space*/
 };
 
+/* Passed time from the begining of the program */ 
+uniform float iTime;
+
 /*input variables*/
 layout (location=0) in vec4 pos;			/*vertex position*/
 layout (location=1) in vec4 v_color;		/*vertex color*/
@@ -20,19 +23,25 @@ layout (location=2) in vec4 normal;			/*vertex normal*/
 /*output variables*/
 out vec4 vtx_color;
 ////TODO: add your out variables to the fragment shader
-out vec4 vtx_norm;
-out vec4 vtx_pos;
-out vec4 frag_pos;
+out vec3 vtx_norm;
+out vec3 vtx_pos;
 
 void main()												
 {
+	float theta = iTime * 2;
+
+	mat4 rot_mat = mat4(cos(theta), sin(theta), 0., 0.,
+						-sin(theta), cos(theta), 0., 0.,
+						0., 0., 1., 0.,
+						0., 0., 0., 1.);
+
 	/*camera-transformed position. do not modify.*/
 	gl_Position=pvm*vec4(pos.xyz,1.f);
+	// gl_Position = pvm * rot_mat * vec4(pos.xyz, 1.f);
 
 	vtx_color=vec4(v_color.rgb,1.f);
 	
 	////TODO: add your operations on the out variables
-	vtx_norm = vec4(normal.xyz, 1.f);
-	vtx_pos = vec4(pos.xyz, 1.f);
-	frag_pos = vec4(pos.xyz, 1.f);
+	vtx_norm = (rot_mat * vec4(normal.xyz, 1.f)).xyz;
+	vtx_pos = (rot_mat * vec4(pos.xyz, 1.f)).xyz;
 }	
