@@ -46,7 +46,7 @@ inline void LoopSubdivision(TriangleMesh<3>& mesh)
 			// Fill out the edge_vtx map:
 			// If edge is not in map
 			if (edge_vtx_map.find(edge) == edge_vtx_map.end()) {
-				// Set midpoint
+				// Set midpoint 
 				Vector3 midpoint = .5 * (old_vtx[edge[0]] + old_vtx[edge[1]]);
 				// Add the new vertex to the new_vtx array
 				new_vtx.push_back(midpoint);

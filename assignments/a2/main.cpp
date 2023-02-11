@@ -89,6 +89,14 @@ public:
 		}
 	}
 
+	void Scale_Vertex_Position_For_Mesh_Object(OpenGLTriangleMesh* obj,float scale)
+	{
+		std::vector<Vector3>& vertices=obj->mesh.Vertices();		
+		for(auto& v:vertices){
+			v*=scale;
+		}
+	}
+
 	////This function demonstrates how to manipulate the color and normal arrays of a mesh on the CPU end.
 	////The updated colors and normals will be sent to GPU for rendering automatically.
 	void Update_Vertex_Color_And_Normal_For_Mesh_Object(OpenGLTriangleMesh* obj, int season)
@@ -215,7 +223,7 @@ public:
 		////Add an obj mesh
 		////TODO [Step 4]: uncomment this part and use your own mesh for Step 4.
 		// {
-		// 	int obj_idx=Add_Obj_Mesh_Object("bunny.obj");
+		// 	int obj_idx=Add_Obj_Mesh_Object("guy.obj");
 		// 	auto obj=mesh_object_array[obj_idx];
 		// 	Update_Vertex_Color_And_Normal_For_Mesh_Object(obj, 0);		
 		// }
@@ -238,6 +246,13 @@ public:
 			auto obj=mesh_object_array[obj_idx];
 			Translate_Vertex_Position_For_Mesh_Object(obj,Vector3::Unit(0)*-3.);
 			Update_Vertex_Color_And_Normal_For_Mesh_Object(obj, 3);		
+		}
+		{
+			int obj_idx=Add_Obj_Mesh_Object("guy.obj");
+			auto obj=mesh_object_array[obj_idx];
+			Scale_Vertex_Position_For_Mesh_Object(obj,0.25);
+			Translate_Vertex_Position_For_Mesh_Object(obj,Vector3::Unit(0)*6.);
+			Update_Vertex_Color_And_Normal_For_Mesh_Object(obj, 1);		
 		}
 
 		//////Add a manually built triangle mesh (with a single triangle). This is the demo code I showed in class.

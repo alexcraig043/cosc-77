@@ -112,7 +112,16 @@ public:
 	void Update_Uv_Using_Spherical_Coordinates(const std::vector<Vector3>& vertices,std::vector<Vector2>& uv)
 	{
 		/*Your implementation starts*/	
-
+		// For each vertex
+		for (int i = 0; i < vertices.size(); i++)
+		{
+			// Get the vertex
+			Vector3 vtx = vertices[i];
+			// Calculate the spherical coordinates
+			float u = atan(vtx[2], vtx[0]) /  (M_PI * 2);
+			float v = acos(vtx[1]) / M_PI;
+			uv[i] = Vector2(u, v);
+		}
 		/*Your implementation ends*/
 	}
 
@@ -156,8 +165,8 @@ public:
 		//}
 
 		////initialize shader
-		std::string vertex_shader_file_name="checkerboard.vert";		////TODO (Step 1 and 2): switch the file name to normal_mapping.vert
-		std::string fragment_shader_file_name="checkerboard.frag";		////TODO (Step 1 and 2): switch the file name to normal_mapping.frag
+		std::string vertex_shader_file_name="normal_mapping.vert";		////TODO (Step 1 and 2): switch the file name to normal_mapping.vert
+		std::string fragment_shader_file_name="normal_mapping.frag";		////TODO (Step 1 and 2): switch the file name to normal_mapping.frag
 		OpenGLShaderLibrary::Instance()->Add_Shader_From_File(vertex_shader_file_name,fragment_shader_file_name,"a3_shader");
 
 		////specifying the textures

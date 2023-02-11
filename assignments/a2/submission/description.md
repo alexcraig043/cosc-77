@@ -37,13 +37,16 @@ Image 3.1
 
 ### Step 4 - Different Mesh
 
-For step 4, I loaded in the bunny mesh and applied Phong shading, as shown in `4.1`. I also colored the bunny with the normals and applied Phong shading, as shown in `4.2`.
+For step 4, I loaded in the bunny mesh and applied Phong shading, as shown in `4.1`. I also colored the bunny with the normals and applied Phong shading, as shown in `4.2`. In `4.3`, I applied the Phong lighting to a .obj file of a man I found at this [link](https://free3d.com/3d-model/male-base-mesh-6682.html). I colored him blue and the dim light makes the scene look pretty creepy in my opinion.
 
 Image 4.1
 ![image](step_4.1.png)
 
 Image 4.2
 ![image](step_4.2.png)
+
+Image 4.3
+![image](step_4.3.png)
 
 ### Step 5 - Light Rotation:
 
@@ -57,7 +60,7 @@ Video 5.2
 
 ### Step 6 - Make a Scene:
 
-To fit the theme "Colors of the Season", I decided to make 4 spheres each with a color that represents a season; red for summer, yellow for fall, blue for winter, and green for spring. I also applied my rotational Phong shading to the scene. I like how it came out, and the scene reminds me of how the Earth's angle to the sun's light changes with each season.
+To fit the theme "Colors of the Season", I decided to make 4 spheres each with a color that represents a season; red for summer, yellow for fall, blue for winter, and green for spring. I then added my human figure to the right. Technically, I had to implement a `Scale_Vertex_Position_For_Mesh_Object` function to make the human mesh the correct size. I also applied my rotational Phong shading to the scene. I like how it came out, and the scene reminds me of how the Earth's angle to the sun's light changes with each season. For me, the spheres represent the four versions of the world in the different seasons, and the human figure represents the people who experience those seasons. My favorite season is fall, so I made the human figure yellow.
 
 Image 6.1
 ![image](step_6.png)

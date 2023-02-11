@@ -25,6 +25,10 @@ layout (location=4) in vec4 tangent;	/*vertex tangent*/	////ATTENTION: this attr
 
 /*output variables*/
 //// TODO: declare your output variables
+out vec3 vtx_pos;
+out vec3 vtx_norm;
+out vec3 vtx_tan;
+out vec2 vtx_uv;
 
 void main()												
 {
@@ -32,4 +36,8 @@ void main()
 	gl_Position=pvm*vec4(pos.xyz,1.f);
 
 	//// TODO: set your out varialbes
+	vtx_pos = pos.xyz;
+	vtx_norm = normal.xyz;
+	vtx_tan = tangent.xyz;
+	vtx_uv = uv.xy;
 }	

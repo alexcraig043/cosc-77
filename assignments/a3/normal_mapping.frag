@@ -19,6 +19,10 @@ uniform sampler2D tex_normal;			////texture normal
 
 /*input variables*/
 //// TODO: declare your input variables
+in vec3 vtx_pos;
+in vec3 vtx_norm;
+in vec3 vtx_tan;
+in vec2 vtx_uv;
 
 /*output variables*/
 out vec4 frag_color;
@@ -44,9 +48,26 @@ void main()
 
 		vec4 col = vec4(1.f);
 
-		frag_color = vec4(col.rgb, 1);
-	}
-	else{
+		float pi = 3.14159265359;
+	
+		float u = atan(vtx_pos.z, vtx_pos.x) / (2.0 * pi);
+		float v = acos(vtx_pos.y) / pi;
+		vec2 new_uv = vec2(u, v);
+
+		// vec3 light_dir = normalize(LightPosition - vtx_pos.xyz);
+		// vec3 norm = normalize(vtx_norm.xyz);
+		// vec3 vi = normalize(position.xyz - vtx_pos.xyz);
+		// vec3 r = normalize(-light_dir + 2.f * dot(light_dir, norm) * norm);
+
+		// vec3 ambient = ka*LightIntensity;
+		// vec3 diffuse = kd*LightIntensity*max(dot(norm, light_dir), 0.0);
+		// vec3 specular = ks*LightIntensity*pow(max(dot(vi,r), 0.0), n);
+
+		// vec4 light = vec4((ambient + diffuse + specular), 1.f);
+
+		col = texture(tex_albedo, vtx_uv);
+		frag_color = vec4(col.rgb, 1.f);
+	} else {
 		//// TODO (Step 3): texture with normal mapping
 		////Here are some useful hints:
 		////Step 3.0: load the texture color from tex_albedo
