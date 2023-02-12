@@ -106,6 +106,24 @@ public:
 		Update_Uv_Using_Spherical_Coordinates(vertices,uv);
 	}
 
+	////This function demonstrates how to manipulate the vertex array of a mesh on the CPU end.
+	////The updated vertices will be sent to GPU for rendering automatically.
+	void Translate_Vertex_Position_For_Mesh_Object(OpenGLTriangleMesh* obj,const Vector3& translate)
+	{
+		std::vector<Vector3>& vertices=obj->mesh.Vertices();		
+		for(auto& v:vertices){
+			v+=translate;
+		}
+	}
+
+	void Scale_Vertex_Position_For_Mesh_Object(OpenGLTriangleMesh* obj,float scale)
+	{
+		std::vector<Vector3>& vertices=obj->mesh.Vertices();		
+		for(auto& v:vertices){
+			v*=scale;
+		}
+	}
+
 	////TODO [Step 0]: update the uv coordinates for each vertex using the spherical coordinates.
 	////NOTICE: This code updates the vertex color array on the CPU end. The array will then be sent to GPU and read it the vertex shader as v_color.
 	////You don't need to implement the CPU-GPU data transfer code.
@@ -129,40 +147,62 @@ public:
 	{
 		//////Add a manually built square mesh (with two triangles). This is the demo code in X-hour.
 		//// You don't need this part for your homework. Just put them here for your reference.
-		//{
-		//	std::vector<Vector3> triangle_vertices={Vector3(0,0,0),Vector3(1,0,0),Vector3(0,1,0),Vector3(1,1,0)};
-		//	int obj_idx=Add_Square_Object(triangle_vertices);	////add a sphere
-		//	auto obj=mesh_object_array[obj_idx];
-		//	
-		//	//specify the vertex colors on the CPU end
-		//	std::vector<Vector4f>& vtx_color=obj->vtx_color;
-		//	vtx_color={Vector4f(1.f,0.f,0.f,1.f),Vector4f(0.f,1.f,0.f,1.f),Vector4f(0.f,0.f,1.f,1.f),Vector4f(1.f,1.f,0.f,1.f)};
+		// {
+		// 	std::vector<Vector3> triangle_vertices={Vector3(0,0,0),Vector3(1,0,0),Vector3(0,1,0),Vector3(1,1,0)};
+		// 	int obj_idx=Add_Square_Object(triangle_vertices);	////add a sphere
+		// 	auto obj=mesh_object_array[obj_idx];
+			
+		// 	//specify the vertex colors on the CPU end
+		// 	std::vector<Vector4f>& vtx_color=obj->vtx_color;
+		// 	vtx_color={Vector4f(1.f,0.f,0.f,1.f),Vector4f(0.f,1.f,0.f,1.f),Vector4f(0.f,0.f,1.f,1.f),Vector4f(1.f,1.f,0.f,1.f)};
 
-		//	std::vector<Vector3>& vtx_normal=obj->vtx_normal;
-		//	vtx_normal={Vector3(0.,0.,1.),Vector3(0.,0.,1.),Vector3(0.,0.,1.),Vector3(0.,0.,1.)};
+		// 	std::vector<Vector3>& vtx_normal=obj->vtx_normal;
+		// 	vtx_normal={Vector3(0.,0.,1.),Vector3(0.,0.,1.),Vector3(0.,0.,1.),Vector3(0.,0.,1.)};
 
-		//	std::vector<Vector2>& uv=obj->mesh.Uvs();
-		//	uv={Vector2(0.,0.),Vector2(1.,0.),Vector2(0.,1.),Vector2(1.,1.)};
+		// 	std::vector<Vector2>& uv=obj->mesh.Uvs();
+		// 	uv={Vector2(0.,0.),Vector2(1.,0.),Vector2(0.,1.),Vector2(1.,1.)};
 
-		//	std::vector<Vector3i>& elements=obj->mesh.Elements();
-		//	elements={Vector3i(0,1,3),Vector3i(0,3,2)};
-		//}
+		// 	std::vector<Vector3i>& elements=obj->mesh.Elements();
+		// 	elements={Vector3i(0,1,3),Vector3i(0,3,2)};
+		// }
 
 		//////Add a sphere mesh
-		{
-			int obj_idx=Add_Sphere_Object();
-			auto obj=mesh_object_array[obj_idx];
-			Update_Vertex_Color_And_Normal_For_Mesh_Object(obj);		
-			Update_Vertex_UV_For_Mesh_Object(obj);			////This is the function you need to implement from Step 0 (for sphere only!)
-		}
+		// {
+		// 	int obj_idx=Add_Sphere_Object();
+		// 	auto obj=mesh_object_array[obj_idx];
+		// 	Update_Vertex_Color_And_Normal_For_Mesh_Object(obj);		
+		// 	Update_Vertex_UV_For_Mesh_Object(obj);			////This is the function you need to implement from Step 0 (for sphere only!)
+		// }
 
 		//////Add an obj mesh
 		//////TODO (Step 4): uncomment this part and use your own mesh for Step 4.
-		//{
-		//	 int obj_idx=Add_Obj_Mesh_Object("bunny.obj");
-		//	 auto obj=mesh_object_array[obj_idx];
-		//	 Update_Vertex_Color_And_Normal_For_Mesh_Object(obj);		
-		//}
+		{
+			 int obj_idx=Add_Obj_Mesh_Object("house.obj");
+			 auto obj=mesh_object_array[obj_idx];
+			 Scale_Vertex_Position_For_Mesh_Object(obj,0.1f);
+			 Translate_Vertex_Position_For_Mesh_Object(obj,Vector3::Unit(0)*-1.);
+			 Update_Vertex_Color_And_Normal_For_Mesh_Object(obj);		
+		}
+		{
+			 int obj_idx=Add_Obj_Mesh_Object("house.obj");
+			 auto obj=mesh_object_array[obj_idx];
+			 Scale_Vertex_Position_For_Mesh_Object(obj,0.1f);
+			 Update_Vertex_Color_And_Normal_For_Mesh_Object(obj);		
+		}
+		{
+			 int obj_idx=Add_Obj_Mesh_Object("house.obj");
+			 auto obj=mesh_object_array[obj_idx];
+			 Scale_Vertex_Position_For_Mesh_Object(obj,0.1f);
+			 Translate_Vertex_Position_For_Mesh_Object(obj,Vector3::Unit(0)*1.);
+			 Update_Vertex_Color_And_Normal_For_Mesh_Object(obj);		
+		}
+		{
+			 int obj_idx=Add_Obj_Mesh_Object("house.obj");
+			 auto obj=mesh_object_array[obj_idx];
+			 Scale_Vertex_Position_For_Mesh_Object(obj,0.1f);
+			 Translate_Vertex_Position_For_Mesh_Object(obj,Vector3::Unit(0)*2.);
+			 Update_Vertex_Color_And_Normal_For_Mesh_Object(obj);		
+		}
 
 		////initialize shader
 		std::string vertex_shader_file_name="normal_mapping.vert";		////TODO (Step 1 and 2): switch the file name to normal_mapping.vert
@@ -170,14 +210,28 @@ public:
 		OpenGLShaderLibrary::Instance()->Add_Shader_From_File(vertex_shader_file_name,fragment_shader_file_name,"a3_shader");
 
 		////specifying the textures
-		OpenGLTextureLibrary::Instance()->Add_Texture_From_File("earth_albedo.png", "albedo");		////TODO (Step 4): use a different texture color image here for your own mesh!
-		OpenGLTextureLibrary::Instance()->Add_Texture_From_File("earth_normal.png", "normal");		////TODO (Step 4): use a different texture normal image here for your own mesh!
+		OpenGLTextureLibrary::Instance()->Add_Texture_From_File("cobble_albedo.jpeg", "albedo_0");		////TODO (Step 4): use a different texture color image here for your own mesh!
+		OpenGLTextureLibrary::Instance()->Add_Texture_From_File("cobble_normal.jpeg", "normal_0");		////TODO (Step 4): use a different texture normal image here for your own mesh!
+
+		OpenGLTextureLibrary::Instance()->Add_Texture_From_File("stone_albedo.jpeg", "albedo_1");		
+		OpenGLTextureLibrary::Instance()->Add_Texture_From_File("stone_normal.jpeg", "normal_1");
+
+		OpenGLTextureLibrary::Instance()->Add_Texture_From_File("wood_albedo.jpeg", "albedo_2");		
+		OpenGLTextureLibrary::Instance()->Add_Texture_From_File("wood_normal.jpeg", "normal_2");
+
+		OpenGLTextureLibrary::Instance()->Add_Texture_From_File("wall_albedo.jpg", "albedo_3");		
+		OpenGLTextureLibrary::Instance()->Add_Texture_From_File("wall_normal.jpg", "normal_3");
 
 		////bind the shader with each mesh object in the object array
-		for(auto& mesh_obj: mesh_object_array){
+		for(int i=0;i<mesh_object_array.size();i++){
+			auto mesh_obj=mesh_object_array[i];
+			// Get albedo string
+			std::string albedo = "albedo_" + std::to_string(i % 4);
+			// Get normal string
+			std::string normal = "normal_" + std::to_string(i % 4);
 			mesh_obj->Add_Shader_Program(OpenGLShaderLibrary::Get_Shader("a3_shader"));
-			mesh_obj->Add_Texture("tex_albedo", OpenGLTextureLibrary::Get_Texture("albedo"));
-			mesh_obj->Add_Texture("tex_normal", OpenGLTextureLibrary::Get_Texture("normal"));
+			mesh_obj->Add_Texture("tex_albedo", OpenGLTextureLibrary::Get_Texture(albedo));
+			mesh_obj->Add_Texture("tex_normal", OpenGLTextureLibrary::Get_Texture(normal));
 			Set_Polygon_Mode(mesh_obj,PolygonMode::Fill);
 			Set_Shading_Mode(mesh_obj,ShadingMode::Texture);
 			mesh_obj->Set_Data_Refreshed();
