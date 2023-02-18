@@ -27,7 +27,7 @@ class NoiseDriver : public Driver, public OpenGLViewer
 {using Base=Driver;
 	std::vector<OpenGLTriangleMesh*> mesh_object_array;		////mesh objects, every object you put in this array will be rendered.
 	clock_t startTime;
-	const int part = 1;										////TODO: set the value of part to be 2 when working on part 2
+	const int part = 2;										////TODO: set the value of part to be 2 when working on part 2
 
 public:
 	virtual void Initialize()
@@ -52,15 +52,26 @@ public:
 		return (int)mesh_object_array.size()-1;
 	}
 
+	////This function demonstrates how to manipulate the vertex array of a mesh on the CPU end.
+	////The updated vertices will be sent to GPU for rendering automatically.
+	void Translate_Vertex_Position_For_Mesh_Object(OpenGLTriangleMesh* obj,const Vector3& translate)
+	{
+		std::vector<Vector3>& vertices=obj->mesh.Vertices();		
+		for(auto& v:vertices){
+			v+=translate;
+		}
+	}
+
 	virtual void Initialize_Data()
 	{
 		std::string name = "model";
-		if(part ==1)
+		if(part == 1)
 			name = "perlin";
 		OpenGLShaderLibrary::Instance()->Add_Shader_From_File(name + ".vert", name +".frag", "a4_shader");		
 		////add the plane mesh object
 		int obj_idx=Add_Obj_Mesh_Object("plane.obj");
 		auto plane_obj=mesh_object_array[obj_idx];
+		Translate_Vertex_Position_For_Mesh_Object(plane_obj,Vector3::Unit(0)*-1.);
 		plane_obj->Add_Shader_Program(OpenGLShaderLibrary::Get_Shader("a4_shader"));
 
 		Set_Polygon_Mode(plane_obj, PolygonMode::Fill);
