@@ -81,15 +81,14 @@ hit hitSphere(const ray r, const sphere s)
 	////TODO: check whether r is interescting with s by updating delta
 	/*Your implementation*/
 
-    // Initliaze quadratic constants
+    // a, b, and c values for quadratic equation
     float a = dot(r.dir, r.dir);
-    float b = 2.0 * dot(r.dir, r.ori - s.ori);
-    float c = dot(r.ori - s.ori, r.ori - s.ori) - s.r * s.r;
+    float b = 2. * dot(r.dir, r.ori - s.ori);
+    float c = dot(r.ori - s.ori, r.ori - s.ori) - pow(s.r, 2);
 
-    // Calculate delta
-    delta = b * b - 4.0 * a * c;
+    delta = pow(b, 2) - 4. * a * c;
 
-    if (delta < 0.0) {
+    if(delta<0.0){
         // no solution, return dummy
         return  dummyHit;
     }
@@ -100,35 +99,22 @@ hit hitSphere(const ray r, const sphere s)
 		////TODO: update other attributes of hit when an intersection is detected
 		/*Your implementation*/
 
-        // Get two solutions
-        float t1 = (-b + sqrt(delta)) / (2.0 * a);
-        float t2 = (-b - sqrt(delta)) / (2.0 * a);
+        // there are two possible solutions to quadratic equation
+        float t_pos = (-b + sqrt(delta)) / (2. * a);
+        float t_neg = (-b - sqrt(delta)) / (2. * a);
 
-        // Set t1 to be the smaller solution
-        if (t1 > t2) {
-            float temp = t1;
-            t1 = t2;
-            t2 = temp;
-        }
+        // choose smaller t value
+        if (t_pos < t_neg)
+            h.t = t_pos;
+        else
+            h.t = t_neg;
 
-        // Get the smallest valid solution
-        if (minT < t1 && t1 < maxT) {
-            h.t = t1;
-        }
-        else if (minT < t2 && t2 < maxT) {
-            h.t = t2;
-        }
-        else {
-            // No solution within the valid range
-            return dummyHit;
-        }
+        // set intersection point using ray
+        h.p = r.ori + r.dir * h.t;
 
-        // Calculate the intersection point
-        h.p = r.ori + h.t * r.dir;
-
-        // Calculate the normal
+        // set normal vector on intersecting point
         h.normal = normalize(h.p - s.ori);
-
+		
         return h;
     }
 }
@@ -140,69 +126,59 @@ hit findHit(ray r, sphere[4] s)
     ////TODO: traverse all the spheres and find the intersecting one with the smallest t value
 	/*Your implementation*/
 
-    // Loop through all spheres
+    // loop throuch each sphere
     for (int i = 0; i < 4; i++) {
-        // Check if the ray intersects with the sphere
-        hit temp = hitSphere(r, s[i]);
-        // If the ray intersects with the sphere and the intersection point is closer than the previous intersection point
-        if (temp.t > 0.0 && (h.t < 0.0 || temp.t < h.t)) {
-            // Update the hit
-            h = temp;
-        }
-    }
+        hit curr = hitSphere(r, s[i]);
 
+        // if current t value is positive and it's less than h (or h is dummyHit), 
+        // update h with current t value
+        if (curr.t >= 0. && (curr.t < h.t || h.t < 0.))
+            h = curr;
+    }
 	return h;
 }
 
 ////TODO: calculate the pixel color for each ray
 vec3 color(ray r, sphere[4] s, light[2] l)
 {
-    vec3 col = vec3(0.0);
-    hit h = findHit(r, s);
-
-    // Lambertian shading
-    vec3 ka = vec3(0.1);
-    vec3 kd = vec3(0.8);
-
-    // Shadow coefficient
+    const vec3 ka = 0.1 * vec3(1., 1., 1.);
+    const vec3 kd = 0.8 * vec3(1., 1., 1.);
+    vec3 col = vec3(0.);
     float epsilon = 0.001;
 
-    if (h.t > 0.){
+    hit h = findHit(r, s);
+    if(h.t > 0.){
 		////TODO: traverse all the lights and calculate the color contribution from each of them
 		////TODO: send an additional shadow ray for each light to implement the shadow effect
 		/*Your implementation*/
 
-        // Include ambient light
-        col += ka;
+        // include ambient term regardless of occluder intersection
+        vec3 ambient = ka * vec3(1.);
+        col += ambient;
 
-        // Loop through all lights
-        for (int i = 0; i < 2; i++) {
-            // Get light position & intensity
-            vec3 lightPos = l[i].position;
-            vec3 lightIntensity = l[i].color;
+        // loop through each light source
+        for (int light_num = 0; light_num < 2; light_num++) {
+            
+            vec3 LightPosition = l[light_num].position;
+            vec3 LightIntensity = l[light_num].color;
 
-            // Calculate the shadow ray vector
-            vec3 shadowRay_vec = h.p + h.normal * epsilon;
+            // start shadow ray a tiny distance from the surface
+            vec3 shadow_ray_o = h.p + h.normal * epsilon;
 
-            // Calculate shadow ray direction
-            ray shadowRay = ray(shadowRay_vec, lightPos - shadowRay_vec);
-            // Check if the shadow ray intersects with any sphere
-            hit shadowHit = findHit(shadowRay, s);
+            // shadow ray direction: beginning at surface, directing to light source
+            ray shadow_ray = ray(shadow_ray_o, LightPosition - shadow_ray_o);
+            hit shadow_hit = findHit(shadow_ray, s);
 
-            // If the shadow ray does not intersect with any sphere
-            if (shadowHit.t < 0.0) {
-                // Calculate light direction
-                vec3 lightDir = normalize(lightPos - h.p);
+            // if no hit detected, then there's no occluder intersection
+            // shade normally using Lambertian model
+            if (shadow_hit.t <= 0.) {
+
+                vec3 light_dir = normalize(LightPosition - h.p);
                 vec3 norm = normalize(h.normal);
-
-                // Calculate the diffuse light
-                vec3 diffuseLight = kd * lightIntensity * max(0.0, dot(lightDir, norm));
-
-                // Apply diffuse light to the color
-                col += diffuseLight;
+                vec3 diffuse = kd * LightIntensity * max(dot(norm, light_dir), 0.);
+                col += diffuse;
             }
         }
-        // Multiply the color by the sphere color
         col *= h.color;
     }
     return col;
