@@ -97,6 +97,7 @@ public:
 		}
 	}
 
+
 	////This function demonstrates how to manipulate the color and normal arrays of a mesh on the CPU end.
 	////The updated colors and normals will be sent to GPU for rendering automatically.
 	void Update_Vertex_Color_And_Normal_For_Mesh_Object(OpenGLTriangleMesh* obj, int season)
