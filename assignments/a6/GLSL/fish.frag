@@ -78,11 +78,15 @@ void main()
 
 		vec4 col = vec4(1.f);
 
+		// Offset albedo to make wave distortion effect
+		vec2 tex_uv = uv_vtx;
+		tex_uv.x += sin(5.0 * uv_vtx.y + 0.25 * iTime) / 20.0;
+
 		// texture color
-		col = texture(tex_albedo, uv_vtx);
+		col = texture(tex_albedo, tex_uv);
 		
 		// normal mapping
-		vec3 norm = texture(tex_normal, uv_vtx).xyz;
+		vec3 norm = texture(tex_normal, tex_uv).xyz;
 		norm = normalize(norm * 2.f - 1.f);
 
 		// Defining local coordinate system

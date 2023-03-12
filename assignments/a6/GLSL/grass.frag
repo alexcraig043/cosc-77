@@ -91,11 +91,6 @@ void main()
 		// float pi = 3.14159265359;
 		vec4 col = vec4(1.f);
 
-		// calculating the u and the v coordinates 
-		// float u = atan(pos_vtx.z, pos_vtx.x) / (2.0 * pi);
-		// float v = acos(pos_vtx.y) / pi;
-		// vec2 uv_n = vec2(u, v);
-
 		// texture color
 		col = texture(tex_albedo, uv_vtx);
 		

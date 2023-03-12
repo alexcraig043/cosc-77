@@ -785,7 +785,7 @@ public:
 		auto& mesh=mesh_obj->mesh;
 
 		////vertex position
-		std::vector<Vector3> triangle_vertices={Vector3(-10,-10,-10),Vector3(10,-10,-10),Vector3(10,-10,10),Vector3(-10,-10,10)};
+		std::vector<Vector3> triangle_vertices={Vector3(-20,-10,-20),Vector3(20,-10,-20),Vector3(20,-10,20),Vector3(-20,-10,20)};
 		std::vector<Vector3>& vertices=mesh_obj->mesh.Vertices();
 		vertices=triangle_vertices;
 
@@ -827,7 +827,7 @@ public:
 		auto& mesh=mesh_obj->mesh;
 
 		////vertex position
-		std::vector<Vector3> triangle_vertices={Vector3(-10,10,-10),Vector3(10,10,-10),Vector3(10,10,10),Vector3(-10,10,10)};
+		std::vector<Vector3> triangle_vertices={Vector3(-20,20,-20),Vector3(20,20,-20),Vector3(20,20,20),Vector3(-20,20,20)};
 		std::vector<Vector3>& vertices=mesh_obj->mesh.Vertices();
 		vertices=triangle_vertices;
 
@@ -872,7 +872,7 @@ public:
 		auto& mesh=mesh_obj->mesh;
 
 		////vertex position
-		std::vector<Vector3> triangle_vertices={Vector3(-10,-10,-10),Vector3(-10,-10,10),Vector3(-10,10,10),Vector3(-10,10,-10)};
+		std::vector<Vector3> triangle_vertices={Vector3(-20,-10,-20),Vector3(-20,-10,20),Vector3(-20,20,20),Vector3(-20,20,-20)};
 		std::vector<Vector3>& vertices=mesh_obj->mesh.Vertices();
 		vertices=triangle_vertices;
 
@@ -916,7 +916,7 @@ public:
 		auto& mesh=mesh_obj->mesh;
 
 		////vertex position
-		std::vector<Vector3> triangle_vertices={Vector3(10,-10,-10),Vector3(10,-10,10),Vector3(10,10,10),Vector3(10,10,-10)};
+		std::vector<Vector3> triangle_vertices={Vector3(20,-10,-20),Vector3(20,-10,20),Vector3(20,20,20),Vector3(20,20,-20)};
 		std::vector<Vector3>& vertices=mesh_obj->mesh.Vertices();
 		vertices=triangle_vertices;
 
@@ -961,7 +961,7 @@ public:
 		auto& mesh=mesh_obj->mesh;
 
 		////vertex position
-		std::vector<Vector3> triangle_vertices={Vector3(10,-10,-10),Vector3(-10,-10,-10),Vector3(-10,10,-10),Vector3(10,10,-10)};
+		std::vector<Vector3> triangle_vertices={Vector3(20,-10,-20),Vector3(-20,-10,-20),Vector3(-20,20,-20),Vector3(20,20,-20)};
 		std::vector<Vector3>& vertices=mesh_obj->mesh.Vertices();
 		vertices=triangle_vertices;
 
@@ -1005,7 +1005,7 @@ public:
 		auto& mesh=mesh_obj->mesh;
 
 		////vertex position
-		std::vector<Vector3> triangle_vertices={Vector3(10,-10,10),Vector3(-10,-10,10),Vector3(-10,10,10),Vector3(10,10,10)};
+		std::vector<Vector3> triangle_vertices={Vector3(20,-10,20),Vector3(-20,-10,20),Vector3(-20,20,20),Vector3(20,20,20)};
 		std::vector<Vector3>& vertices=mesh_obj->mesh.Vertices();
 		vertices=triangle_vertices;
 
@@ -1074,7 +1074,7 @@ public:
 		//Add_Background();
 		Add_Object_1();
 		Add_Skybox_back();
-		// Add_Skybox_front();
+		Add_Skybox_front();
 		Add_Skybox_bottom();
 		Add_Skybox_up();
 		Add_Skybox_left();

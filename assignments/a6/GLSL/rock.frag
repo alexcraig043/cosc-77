@@ -91,16 +91,15 @@ void main()
 		// float pi = 3.14159265359;
 		vec4 col = vec4(1.f);
 
-		// calculating the u and the v coordinates 
-		// float u = atan(pos_vtx.z, pos_vtx.x) / (2.0 * pi);
-		// float v = acos(pos_vtx.y) / pi;
-		// vec2 uv_n = vec2(u, v);
+		// Offset albedo to make wave distortion effect
+		vec2 tex_uv = uv_vtx;
+		tex_uv.x += sin(3.0 * uv_vtx.y + 0.1 * iTime) / 20.0;
 
 		// texture color
-		col = texture(tex_albedo, uv_vtx);
+		col = texture(tex_albedo, tex_uv);
 		
 		// normal mapping
-		vec3 norm = texture(tex_normal, uv_vtx).xyz;
+		vec3 norm = texture(tex_normal, tex_uv).xyz;
 		norm = normalize(norm * 2.f - 1.f);
 
 		// Defining local coordinate system

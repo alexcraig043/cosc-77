@@ -25,6 +25,11 @@ out vec4 frag_color;
 
 void main()
 {
+
+	// Offset albedo to make wave distortion effect
+	vec2 tex_uv = uv_vtx;
+	tex_uv.x += sin(5.0 * uv_vtx.y + 0.1 * iTime) / 20.0;
+
 	vec3 tex_color = texture(tex, uv_vtx).xyz;
 
 	vec2 caustic_uv_a = uv_vtx * 2 + vec2(0.0, -0.05 * iTime);
