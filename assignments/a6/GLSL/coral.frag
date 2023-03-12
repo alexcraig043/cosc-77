@@ -16,6 +16,7 @@ layout (std140) uniform camera
 uniform float iTime;					////time
 uniform sampler2D tex_albedo;			////texture color
 uniform sampler2D tex_normal;			////texture normal
+uniform sampler2D tex_caustic;			////texture caustic
 
 /*input variables*/
 //// TODO: declare your input variables
@@ -120,8 +121,13 @@ void main()
 
 		
 		vec4 all_light = vec4((amb_light + diff_light + spec_light), 1.f);
-		
 
-		frag_color = vec4(all_light.rgb * col.rgb, 1.f);
+		// caustic
+		vec2 caustic_uv_a = uv_vtx * 1 + vec2(0.0, -0.05 * iTime);
+		vec3 caustic_color_a = texture(tex_caustic, caustic_uv_a).xyz;
+
+		vec3 final_color = all_light.rgb * col.rgb + 0.25 * caustic_color_a;
+
+		frag_color = vec4(final_color, 1.f);
 	}
 }	

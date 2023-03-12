@@ -16,6 +16,7 @@ layout (std140) uniform camera
 uniform float iTime;					////time
 uniform sampler2D tex_albedo;			////texture color
 uniform sampler2D tex_normal;			////texture normal
+uniform sampler2D tex_caustic;			////texture caustic
 
 /*input variables*/
 //// TODO: declare your input variables
@@ -37,14 +38,11 @@ const float n = 400.0;
 
 void main()							
 {		
+	
 	bool use_normal_mapping = true;	////TODO: set this flag to be true when you move from Step 2 to Step 3
 
 	if(!use_normal_mapping){
-		//// TODO (Step 1 and 2): texture with shading
-		////Here are some useful hints:
-		////Step 1.0: load the texture color from tex_albedo and then set it to frag_color
-		////Step 2.0: use the loaded texture color as the local material color and multiply the local color with the Lambertian shading model you implemented previously to render a textured and shaded sphere.
-		////The way to read a texture is to call texture(texture_name,uv). It will return a vec4.
+
 
 		
 		float pi = 3.14159265359;
@@ -77,23 +75,8 @@ void main()
 
 	}
 	else{
-		//// TODO (Step 3): texture with normal mapping
-		////Here are some useful hints:
-		////Step 3.0: load the texture color from tex_albedo
-		////Step 3.1: load the texture normal from tex_normal, and remap each component from [0, 1] to [-1, 1] (notice that currently the loaded normal is in the local tangent space)
-		////Step 3.2: calculate the TBN matrix using the vertex normal and tangent
-		////Step 3.3: transform the texture normal from the local tangent space to the global world space
-		////Step 3.4 and following: use the transformed normal and the loaded texture color to conduct the further lighting calculation
-		////The way to declare a 3x3 matrix is mat3 mat=mat3(v0,v1,v2);
-		////The way to read a texture is to call texture(texture_name,uv). It will return a vec4.
-		////The way to calculate cross product is to call cross(u1,u2);
-		// float pi = 3.14159265359;
-		vec4 col = vec4(1.f);
 
-		// calculating the u and the v coordinates 
-		// float u = atan(pos_vtx.z, pos_vtx.x) / (2.0 * pi);
-		// float v = acos(pos_vtx.y) / pi;
-		// vec2 uv_n = vec2(u, v);
+		vec4 col = vec4(1.f);
 
 		// texture color
 		col = texture(tex_albedo, uv_vtx);
@@ -120,8 +103,14 @@ void main()
 
 		
 		vec4 all_light = vec4((amb_light + diff_light + spec_light), 1.f);
+
+		// caustic
+		vec2 caustic_uv_a = uv_vtx * .25 + vec2(0.0, -0.05 * iTime);
+		vec3 caustic_color_a = texture(tex_caustic, caustic_uv_a).xyz;
+
+		vec3 final_color = all_light.rgb * col.rgb + 0.25 * caustic_color_a;
 		
 
-		frag_color = vec4(all_light.rgb * col.rgb, 1.f);
+		frag_color = vec4(final_color, 1.f);
 	}
 }	

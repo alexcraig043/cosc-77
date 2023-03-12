@@ -23,6 +23,7 @@ layout (location=2) in vec4 normal;		/*vertex normal*/	////ATTENTION: this attri
 layout (location=3) in vec4 uv;			/*vertex uv*/		////ATTENTION: this is the texture coordinates!
 layout (location=4) in vec4 tangent;	/*vertex tangent*/	////ATTENTION: this attribute is important for TBN matrix calculation!
 
+uniform mat4 model;						/*model matrix*/
 /*output variables*/
 //// TODO: declare your output variables
 out vec3 pos_vtx;
@@ -33,8 +34,7 @@ out vec2 uv_vtx;
 void main()												
 {
 	/*camera-transformed position. do not modify.*/
-	gl_Position=pvm*vec4(pos.xyz,1.f);
-
+	gl_Position=pvm*model*vec4(pos.xyz,1.f);
 	//// TODO: set your out varialbes
 	pos_vtx = pos.xyz;
 	norm_vtx = normal.xyz;

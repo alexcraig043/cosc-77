@@ -1,5 +1,3 @@
-//SKYBOX VERT
-
 #version 330 core
 
 #define PI 3.14159265
@@ -25,17 +23,19 @@ uniform float iTime;
 
 /*output variables*/
 out vec3 vtx_pos;
-out vec3 norm;
-out vec2 uv2;
+out vec3 norm_vtx;
+out vec2 uv_vtx;
 
 void main()
 {
-	float orbit_speed = -0.3;
-	float theta = orbit_speed * iTime;
-	mat3 rot_mat = mat3(vec3(cos(theta), 0.f, -sin(theta)), vec3(0.f, 1.f, 0.f), vec3(sin(theta), 0.f, cos(theta)));
-	gl_Position=pvm*vec4(rot_mat * pos.xyz,1.f);
-	vtx_pos = rot_mat * pos.xyz;
-	norm = rot_mat * normal.xyz;
-	uv2 = uv.xy;
+
+	// mat4 view2 = mat4(mat3(view));  
+	// gl_Position=projection*view2*vec4(pos.xyz,1.f);
+
+	gl_Position=pvm*vec4(pos.xyz,1.f);
+	vtx_pos = pos.xyz;
+	norm_vtx = normal.xyz;
+	uv_vtx = uv.xy;
+
 }
 

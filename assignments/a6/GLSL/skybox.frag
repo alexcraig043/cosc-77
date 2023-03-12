@@ -15,17 +15,24 @@ layout (std140) uniform camera
 /*uniform variables*/
 uniform float iTime;					////time
 uniform sampler2D tex;			////texture
+uniform sampler2D tex_caustic;	////texture
 
 in vec3 vtx_pos;
-in vec3 norm;
-in vec2 uv2;
+in vec3 norm_vtx;
+in vec2 uv_vtx;
 
 out vec4 frag_color;
 
 void main()
 {
-	// frag_color = vec4(norm * 0.5 + 0.5,1.f);
-	vec2 tex_size = textureSize(tex, 0);
-	frag_color = vec4(texture(tex, uv2).xyz, 1.f);
-	// frag_color = vec4(vtx_pos, 1.f);
+	vec3 tex_color = texture(tex, uv_vtx).xyz;
+
+	vec2 caustic_uv_a = uv_vtx * 2 + vec2(0.0, -0.05 * iTime);
+	vec3 caustic_color_a = texture(tex_caustic, caustic_uv_a).xyz;
+
+	vec2 caustic_uv_b = uv_vtx * 1 + vec2(0.05 * iTime, 0.05 * iTime);
+	vec3 caustic_color_b = texture(tex_caustic, caustic_uv_b).xyz;
+
+	vec3 final_color = tex_color + 0.1 * caustic_color_a + 0.1 * caustic_color_b;
+	frag_color = vec4(final_color, 1.f);
 }
